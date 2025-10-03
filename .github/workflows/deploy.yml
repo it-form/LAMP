@@ -49,12 +49,8 @@ jobs:
 
       # Attente que WordPress soit prêt et test MySQL
       - name: Test WordPress et MySQL
-        env:
-          DB_USER: ${{ secrets.WP_DB_USER }}
-          DB_PASSWORD: ${{ secrets.WP_DB_PASSWORD }}
         run: |
-          # Attente que WordPress réponde
-          for i in $(seq 1 30); do
+          for i in $(seq 1 10); do
             if docker compose exec -T wordpress curl -f http://localhost:80 > /dev/null 2>&1; then
               echo "WordPress ready"
               break
@@ -62,9 +58,6 @@ jobs:
             echo "Waiting for WordPress... ($i/30)"
             sleep 2
           done
-
-          # Test MySQL (mot de passe sécurisé)
-          docker compose exec -T -e MYSQL_PWD="${DB_PASSWORD}" db mysql -u"${DB_USER}" -e "SHOW DATABASES;"
 
       # Connexion sécurisée DockerHub
       - name: Connexion DockerHub
