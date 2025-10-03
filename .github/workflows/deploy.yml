@@ -56,18 +56,13 @@ jobs:
             if docker compose exec -T wordpress curl -f http://localhost:80 > /dev/null 2>&1; then
               echo "WordPress Fonctionne"
               break
-           fi
-           echo "Attente de Wordpress"
-           sleep 1
-         done
+            fi
+            echo "Attente de Wordpress"
+            sleep 1
+          done
 
-         # Test MySQL
-         docker compose exec -T -e MYSQL_PWD="$DB_PASSWORD" db mysql -u"$DB_USER" -e "SHOW DATABASES;"
-
-      - name: Test WordPress
-        run: |
-          curl -f http://localhost:8080 || exit 1
-          docker compose exec -T db mysql -e "SHOW DATABASES;"
+          # Test MySQL
+          docker compose exec -T -e MYSQL_PWD="$DB_PASSWORD" db mysql -u"$DB_USER" -e "SHOW DATABASES;"
 
       - name: Connexion DockerHub
         uses: docker/login-action@v2
