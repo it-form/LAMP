@@ -19,10 +19,6 @@ jobs:
       - name: Checkout du code
         uses: actions/checkout@v4
 
-
-
-
-
       - name: Vérification Docker
         run: |
           docker --version
@@ -89,7 +85,8 @@ jobs:
           username: ${{ secrets.SRV_USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd /home/${{ secrets.SRV_USER }}/wordpress-app
+          echo "${{ secrets.DCK_TOKEN }}" | docker login -u "${{ secrets.DCK_USER }}" --password-stdin
+           cd /home/${{ secrets.SRV_USER }}/wordpress-app
             docker compose pull
             docker compose up -d --remove-orphans
 
