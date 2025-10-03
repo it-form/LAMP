@@ -1,4 +1,4 @@
- name: CI/CD WordPress
+name: CI/CD WordPress
 
 on:
   push:
