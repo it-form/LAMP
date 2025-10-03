@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: user
+      MYSQL_PASSWORD: poseidon
+      MYSQL_ROOT_PASSWORD: poseidon
+    ports:
+      - "3306:3306"
+
+  wordpress:
+    build: .
+    image: itform/wordpress-ci:latest
+    depends_on:
+      - db
+    ports:
+      - "8080:80"
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: user
+      WORDPRESS_DB_PASSWORD: poseidon
+      WORDPRESS_DB_NAME: wordpress
+
+  adminer:
+    image: adminer
+    ports:
+      - "8081:8080"
+
