@@ -62,7 +62,7 @@ jobs:
           done
 
           # Test MySQL
-          docker compose exec -T -e MYSQL_PWD="$DB_PASSWORD" db mysql -u"$DB_USER" -e "SHOW DATABASES;"
+          docker compose exec -T -e MYSQL_PWD="${DB_PASSWORD}" db mysql -u"${DB_USER}" -e "SHOW DATABASES;"
 
       - name: Connexion DockerHub
         uses: docker/login-action@v2
