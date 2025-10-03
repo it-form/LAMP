@@ -36,15 +36,33 @@ jobs:
           DB_USER: ${{ secrets.WP_DB_USER }}
           DB_PASSWORD: ${{ secrets.WP_DB_PASSWORD }}
         run: |
-          for i in $(seq 1 30); do
+          for i in $(seq 1 10); do
             if docker compose exec -T -e MYSQL_PWD="$DB_PASSWORD" db \
                mysql -h127.0.0.1 -u"$DB_USER" -e "SELECT 1" > /dev/null 2>&1; then
               echo "DB ready"
               break
             fi
             echo "Waiting for DB... ($i/30)"
-            sleep 2
+            sleep 1
           done
+
+      - name: Test WordPress
+        env:
+          DB_USER: ${{ secrets.WP_DB_USER }}
+          DB_PASSWORD: ${{ secrets.WP_DB_PASSWORD }}
+        run: |
+        # Attente que WordPress soit prêt
+        for i in $(seq 1 10); do
+          if docker compose exec -T wordpress curl -f http://localhost:80 > /dev/null 2>&1; then
+            echo "WordPress Fonctionne"
+            break
+         fi
+         echo "Attente de Wordpress"
+         sleep 1
+       done
+
+       # Test MySQL
+       docker compose exec -T -e MYSQL_PWD="$DB_PASSWORD" db mysql -u"$DB_USER" -e "SHOW DATABASES;"
 
       - name: Test WordPress
         run: |
